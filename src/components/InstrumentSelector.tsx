@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Guitar, Music } from 'lucide-react';
+import { Guitar, Music, Piano } from 'lucide-react';
 import { Instrument } from '../data/chords';
 
 interface InstrumentSelectorProps {
@@ -15,7 +15,8 @@ const InstrumentSelector: React.FC<InstrumentSelectorProps> = ({
   const instruments: { value: Instrument; label: string; icon: React.ReactNode }[] = [
     { value: 'guitar', label: 'Guitar', icon: <Guitar className="h-5 w-5" /> },
     { value: 'bass', label: 'Bass', icon: <Music className="h-5 w-5" /> },
-    { value: 'ukulele', label: 'Ukulele', icon: <Music className="h-5 w-5" /> }
+    { value: 'ukulele', label: 'Ukulele', icon: <Music className="h-5 w-5" /> },
+    { value: 'piano', label: 'Piano', icon: <Piano className="h-5 w-5" /> }
   ];
 
   return (
