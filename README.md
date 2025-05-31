@@ -1,73 +1,33 @@
-# Welcome to your Lovable project
+# Welcome to the Chord Learner
 
-## Project info
+## What is Chord Learner?
 
-**URL**: https://lovable.dev/projects/8911ac4e-b2c1-456a-ae84-bce33f47bbbc
+Chord Learner is a app which allows you to preview and learn chords on:
 
-## How can I edit this code?
+- Guitar
+- Bass
+- Ukulele
+- Piano
 
-There are several ways of editing your application.
+## How to use Chord Learner?
+Install the necessary dependencies: 
 
-**Use Lovable**
+Dowmload node.js
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/8911ac4e-b2c1-456a-ae84-bce33f47bbbc) and start prompting.
+Download git
 
-Changes made via Lovable will be committed automatically to this repo.
+Then run in command prompt or powershell
 
-**Use your preferred IDE**
+git clone https://github.com/jacobxny/strum-easy-chords
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+cd strum-easy-chords
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+npm i 
 
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
 npm run dev
-```
 
-**Edit a file directly in GitHub**
+Then visit localhost:8080 or whatever your command prompt gives you (o + enter also works)
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## If you get any errors:
 
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/8911ac4e-b2c1-456a-ae84-bce33f47bbbc) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Make sure to install the latest version of esbuild and vite and it should work
