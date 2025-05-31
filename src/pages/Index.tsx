@@ -3,24 +3,30 @@ import React, { useState } from 'react';
 import { Guitar, Music2, BookOpen } from 'lucide-react';
 import ChordSearch from '../components/ChordSearch';
 import ChordDiagram from '../components/ChordDiagram';
-import { ChordData, chordDatabase } from '../data/chords';
+import InstrumentSelector from '../components/InstrumentSelector';
+import { ChordData, chordDatabase, Instrument } from '../data/chords';
 
 const Index = () => {
   const [selectedChord, setSelectedChord] = useState<ChordData | null>(null);
   const [showPopularChords, setShowPopularChords] = useState(true);
+  const [selectedInstrument, setSelectedInstrument] = useState<Instrument>('guitar');
 
-  const popularChords = [
-    chordDatabase['C'],
-    chordDatabase['G'],
-    chordDatabase['Am'],
-    chordDatabase['F'],
-    chordDatabase['Em'],
-    chordDatabase['Dm']
-  ];
+  const getPopularChords = (instrument: Instrument) => {
+    const chordKeys = ['C', 'G', 'Am', 'F', 'Em', 'Dm'];
+    return chordKeys
+      .map(key => chordDatabase[key]?.find(chord => chord.instrument === instrument))
+      .filter(Boolean) as ChordData[];
+  };
 
   const handleChordSelect = (chord: ChordData) => {
     setSelectedChord(chord);
     setShowPopularChords(false);
+  };
+
+  const handleInstrumentChange = (instrument: Instrument) => {
+    setSelectedInstrument(instrument);
+    setSelectedChord(null);
+    setShowPopularChords(true);
   };
 
   return (
@@ -30,23 +36,32 @@ const Index = () => {
         <div className="container mx-auto px-4 py-8">
           <div className="flex items-center justify-center gap-3 mb-6">
             <Guitar className="h-10 w-10" />
-            <h1 className="text-4xl font-bold">Guitar Chord Library</h1>
+            <h1 className="text-4xl font-bold">Music Chord Library</h1>
           </div>
           <p className="text-center text-amber-100 text-lg max-w-2xl mx-auto">
-            Learn guitar chords with interactive diagrams. Search for any chord and see exactly where to place your fingers.
+            Learn guitar, bass, and ukulele chords with interactive diagrams. Search for any chord and see exactly where to place your fingers.
           </p>
         </div>
       </div>
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8">
+        {/* Instrument Selector */}
+        <InstrumentSelector 
+          selectedInstrument={selectedInstrument}
+          onInstrumentChange={handleInstrumentChange}
+        />
+
         {/* Search Section */}
         <div className="mb-12">
           <div className="flex items-center justify-center gap-2 mb-6">
             <Music2 className="h-6 w-6 text-amber-600" />
             <h2 className="text-2xl font-semibold text-amber-900">Find Your Chord</h2>
           </div>
-          <ChordSearch onChordSelect={handleChordSelect} />
+          <ChordSearch 
+            onChordSelect={handleChordSelect} 
+            selectedInstrument={selectedInstrument}
+          />
         </div>
 
         {/* Selected Chord Display */}
@@ -61,10 +76,12 @@ const Index = () => {
           <div className="mb-12">
             <div className="flex items-center justify-center gap-2 mb-8">
               <BookOpen className="h-6 w-6 text-amber-600" />
-              <h2 className="text-2xl font-semibold text-amber-900">Popular Chords</h2>
+              <h2 className="text-2xl font-semibold text-amber-900">
+                Popular {selectedInstrument.charAt(0).toUpperCase() + selectedInstrument.slice(1)} Chords
+              </h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-              {popularChords.map((chord, index) => (
+              {getPopularChords(selectedInstrument).map((chord, index) => (
                 <div
                   key={index}
                   onClick={() => handleChordSelect(chord)}
@@ -87,7 +104,7 @@ const Index = () => {
               }}
               className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200"
             >
-              Browse Popular Chords
+              Browse Popular {selectedInstrument.charAt(0).toUpperCase() + selectedInstrument.slice(1)} Chords
             </button>
           </div>
         )}
