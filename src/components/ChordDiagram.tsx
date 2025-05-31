@@ -1,16 +1,31 @@
-
-import React from 'react';
+import React, { useState } from 'react';
+import { Play } from 'lucide-react';
 import { ChordData, instrumentStrings } from '../data/chords';
+import { chordAudioPlayer } from '../utils/chordAudio';
 
 interface ChordDiagramProps {
   chord: ChordData;
 }
 
 const ChordDiagram: React.FC<ChordDiagramProps> = ({ chord }) => {
+  const [isPlaying, setIsPlaying] = useState(false);
   const strings = instrumentStrings[chord.instrument];
   const frets = [1, 2, 3, 4, 5];
   const stringWidth = chord.instrument === 'bass' ? 40 : 32;
   const diagramWidth = 20 + (strings.length - 1) * stringWidth + 20;
+
+  const handlePlayChord = async () => {
+    if (isPlaying) return;
+    
+    setIsPlaying(true);
+    try {
+      await chordAudioPlayer.playChord(chord.name);
+    } catch (error) {
+      console.error('Error playing chord:', error);
+    } finally {
+      setTimeout(() => setIsPlaying(false), 2000); // Reset after 2 seconds
+    }
+  };
 
   // Piano keyboard rendering
   if (chord.instrument === 'piano') {
@@ -22,11 +37,26 @@ const ChordDiagram: React.FC<ChordDiagramProps> = ({ chord }) => {
     
     return (
       <div className="bg-white rounded-lg shadow-lg p-6 border-2 border-amber-200">
-        <h3 className="text-xl font-bold text-amber-900 mb-2 text-center">{chord.name}</h3>
-        <p className="text-sm text-amber-700 mb-4 text-center capitalize">{chord.instrument}</p>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex-1">
+            <h3 className="text-xl font-bold text-amber-900 mb-1 text-center">{chord.name}</h3>
+            <p className="text-sm text-amber-700 text-center capitalize">{chord.instrument}</p>
+          </div>
+          <button
+            onClick={handlePlayChord}
+            disabled={isPlaying}
+            className={`ml-4 p-2 rounded-full transition-colors ${
+              isPlaying 
+                ? 'bg-amber-300 text-amber-600 cursor-not-allowed' 
+                : 'bg-amber-600 text-white hover:bg-amber-700'
+            }`}
+            title="Play chord sound"
+          >
+            <Play className={`h-5 w-5 ${isPlaying ? 'animate-pulse' : ''}`} />
+          </button>
+        </div>
         
         <div className="relative mx-auto" style={{ width: whiteKeys.length * keyWidth }}>
-          {/* Piano keyboard */}
           <svg width={whiteKeys.length * keyWidth} height={whiteKeyHeight + 20} className="mx-auto">
             {/* White keys */}
             {whiteKeys.map((key, index) => {
@@ -48,7 +78,7 @@ const ChordDiagram: React.FC<ChordDiagramProps> = ({ chord }) => {
             
             {/* Black keys */}
             {blackKeys.map((key, index) => {
-              const blackKeyPositions = [0.7, 1.7, 3.7, 4.7, 5.7]; // Positions relative to white keys
+              const blackKeyPositions = [0.7, 1.7, 3.7, 4.7, 5.7];
               const isPressed = chord.keys?.includes(key);
               if (index < blackKeyPositions.length) {
                 return (
@@ -103,11 +133,26 @@ const ChordDiagram: React.FC<ChordDiagramProps> = ({ chord }) => {
   // String instrument rendering (guitar, bass, ukulele)
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 border-2 border-amber-200">
-      <h3 className="text-xl font-bold text-amber-900 mb-2 text-center">{chord.name}</h3>
-      <p className="text-sm text-amber-700 mb-4 text-center capitalize">{chord.instrument}</p>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex-1">
+          <h3 className="text-xl font-bold text-amber-900 mb-1 text-center">{chord.name}</h3>
+          <p className="text-sm text-amber-700 text-center capitalize">{chord.instrument}</p>
+        </div>
+        <button
+          onClick={handlePlayChord}
+          disabled={isPlaying}
+          className={`ml-4 p-2 rounded-full transition-colors ${
+            isPlaying 
+              ? 'bg-amber-300 text-amber-600 cursor-not-allowed' 
+              : 'bg-amber-600 text-white hover:bg-amber-700'
+          }`}
+          title="Play chord sound"
+        >
+          <Play className={`h-5 w-5 ${isPlaying ? 'animate-pulse' : ''}`} />
+        </button>
+      </div>
       
       <div className="relative">
-        {/* Guitar/Bass/Ukulele neck */}
         <svg width={diagramWidth} height="250" viewBox={`0 0 ${diagramWidth} 250`} className="mx-auto">
           {/* Fret lines */}
           {frets.map((fret, index) => (
@@ -150,7 +195,6 @@ const ChordDiagram: React.FC<ChordDiagramProps> = ({ chord }) => {
           {/* Finger positions */}
           {chord.positions.map((position, stringIndex) => {
             if (position === -1) {
-              // Muted string (X)
               return (
                 <g key={stringIndex}>
                   <line
@@ -172,7 +216,6 @@ const ChordDiagram: React.FC<ChordDiagramProps> = ({ chord }) => {
                 </g>
               );
             } else if (position === 0) {
-              // Open string (O)
               return (
                 <circle
                   key={stringIndex}
@@ -185,7 +228,6 @@ const ChordDiagram: React.FC<ChordDiagramProps> = ({ chord }) => {
                 />
               );
             } else {
-              // Fretted note
               const fretY = 30 + (position - chord.baseFret) * 40;
               const fingerNumber = chord.fingers[stringIndex];
               
