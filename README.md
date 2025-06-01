@@ -18,9 +18,9 @@ Download git
 
 Then run in command prompt or powershell
 
-git clone https://github.com/jacobxny/strum-easy-chords
+git clone https://github.com/jacobxny/Chord-Learner/
 
-cd strum-easy-chords
+cd Chord-Learner
 
 npm i 
 
